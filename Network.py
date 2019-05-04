@@ -22,23 +22,25 @@ class Network(object):
 
 		# If there is test data to test after each epoch
 		if test_data:
-			n_test = len(test_data)
+			n_test = sum(1 for _ in test_data) 
+			# n_test = len(test_data)
 
-		n = len(training_data)
-		for j in xrange(epochs):
+		# n = len(training_data)
+		n = sum(1 for _ in training_data) 
+		for j in range(epochs):
 			# Shuffle all of the data
 			random.shuffle(training_data)
 			# Create batches to train on
 			mini_batches = [
-				training_data[k:k+mini_batch_size] for k in xrange(0, n, mini_batch_size)]
+				training_data[k:k+mini_batch_size] for k in range(0, n, mini_batch_size)]
 			# Update all of the batches with using backpropogation
 			for mini_batch in mini_batches:
 				self.update_mini_batch(mini_batch, eta)
 			# Print out results
 			if test_data:
-				print "Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test)
+				print(("Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test)))
 			else:
-				print "Epoch {0} complete".format(j)
+				print(("Epoch {0} complete".format(j)))
 
 
 	def update_mini_batch(self, mini_batch, eta):
@@ -78,7 +80,7 @@ class Network(object):
 		nabla_b[-1] = delta
 		nabla_w[-1] = np.dot(delta, activations[-2].transpose())
 		# Go through all the layers
-		for l in xrange(2, self.num_layers):
+		for l in range(2, self.num_layers):
 			z = zs[-l]
 			sp = sigmoid_prime(z)
 			delta = np.dot(self.weights[-l+1].transpose(), delta) * sp
