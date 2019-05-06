@@ -181,13 +181,8 @@ class Convolution_Layer(object):
         for _ in range(epocs):
             random.shuffle(image_set)
             for img in image_set:
-                # randomly manipulate image form test set
-#                img = load_data.random_maniputlate_image(img)
                 # extract image patches from training image and add to buffer
                 data = extract_patches_2d(img.reshape(28,28), patch_size, max_patches=max_patches, random_state=rng)
-#                data = []
-#                for __ in range(max_patches):
-#                    data.append(img.reshape(28,28)[6:-6,6:-6])
                 data = np.reshape(data, (len(data), -1))
                 buffer.append(data)
                 index += 1 
@@ -195,14 +190,10 @@ class Convolution_Layer(object):
                 # fit data when batch size criteria is met   
                 if index % batch_size  == 0:
                     data = np.concatenate(buffer, axis=0)
-                    # condition data for fit
-#                    data -= np.mean(data, axis=0)
-#                    data /= np.std(data, axis=0)
                     # fit data using kmeans partial fit and clear buffer
                     kmeans.partial_fit(data)
                     buffer = []
         # extract and cluster centers as list of convolutional kernles
-    #    kernels = [(patch.reshape(patch_size)-np.min(patch))/(np.max(patch)- np.min(patch)) for patch in kmeans.cluster_centers_]
         kernels = [self.hlf((patch.reshape(patch_size)-np.min(patch))/(np.max(patch) - np.min(patch)),0.5) for patch in kmeans.cluster_centers_]
         return kernels
     
@@ -280,36 +271,4 @@ if __name__ is '__main__':
             plt.yticks(())
         plt.suptitle('cnn _activation for digit %d' %
                      key, fontsize=16)
-    #%%
-#    for img, convs, pool, key in pool_outputs:
-##        plt.figure(figsize=(4.2, 4.5))
-##        plt.imshow(img, cmap=plt.cm.gray,
-##                   interpolation='nearest')
-##        plt.suptitle('Randomly adjusted MNIST\n Digits %d' % key, fontsize=16)
-##        plt.xticks(())
-##        plt.yticks(())
-##        plt.show()
-##        
-##        plt.figure(figsize=(4.2, 4.5))
-##        for i, patch in enumerate(convs):
-##            plt.subplot(7, 7, i + 1)
-##            plt.imshow(patch, cmap=plt.cm.gray,
-##                       interpolation='nearest')
-##            plt.xticks(())
-##            plt.yticks(()) 
-##   
-##        plt.suptitle('Convolutional Output for \n Randomly adjusted MNIST Digits %d' %
-##                     key, fontsize=16)
-##        plt.show()
-#        
-#        plt.figure(figsize=(4.2, 4.5))
-#        for i, patch in enumerate(pool):
-#            plt.subplot(7, 7, i + 1)
-#            plt.imshow(sigmoid(patch), cmap=plt.cm.gray,
-#                       interpolation='nearest')
-#            plt.xticks(())
-#            plt.yticks(()) 
-#   
-#        plt.suptitle('Max Pooled Output for \n Randomly adjusted MNIST Digits %d' %
-#                     key, fontsize=16)
-#        plt.show()        
+        
