@@ -220,9 +220,7 @@ if __name__ is '__main__':
 
         
     plt.figure(figsize=(4.2, 4.5))
-    for i, patch in enumerate(cnn.kernels):
-        
-#        print('%6.4f, %6.4f' % (np.min(patch), np.max(patch)))
+    for i, patch in enumerate(cnn.kernels):     
         plt.subplot(int(np.sqrt(cnn.n_clusters)), int(np.sqrt(cnn.n_clusters)), i + 1)
         plt.imshow(patch, cmap=plt.cm.gray,
                    interpolation='nearest')
