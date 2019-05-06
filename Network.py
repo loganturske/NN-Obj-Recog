@@ -18,7 +18,7 @@ class Network(object):
 		return a
 
 	def SGD(self, training_data, epochs, mini_batch_size, eta,
-			test_data=None):
+			test_data=None, seed=0):
 		# Training data is a list of tuples (inputs, desired outputs)
 
 		# If there is test data to test after each epoch
@@ -28,6 +28,7 @@ class Network(object):
 
 		# n = len(training_data)
 		n = sum(1 for _ in training_data) 
+		random.seed(seed)
 		for j in range(epochs):
 			# Shuffle all of the data
 			random.shuffle(training_data)
