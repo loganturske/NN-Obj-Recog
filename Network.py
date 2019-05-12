@@ -88,10 +88,38 @@ class Network(object):
             nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
         return (nabla_b, nabla_w)
 
+
     def evaluate(self, test_data):
         test_results = [(np.argmax(self.feedforward(x)), y)
                         for (x, y) in test_data]
         return sum(int(x == y) for (x, y) in test_results)
+      
+	def backprop(self, x, y):
+		nabla_b = [np.zeros(b.shape) for b in self.biases]
+		nabla_w = [np.zeros(w.shape) for w in self.weights]
+		# feedforward
+		activation = x
+		activations = [x]
+		# Z vectors
+		zs = []
+		for bias, weight in zip(self.biases, self.weights):
+			z = np.dot(weight, activation)+bias
+			zs.append(z)
+			activation = sigmoid(z)
+			activations.append(activation)
+		# backward pass
+		delta = self.cost_derivative(activations[-1], y) * \
+			sigmoid_prime(zs[-1])
+		nabla_b[-1] = delta
+		nabla_w[-1] = np.dot(delta, activations[-2].transpose())
+		# Go through all the layers
+		for l in range(2, self.num_layers):
+			z = zs[-l]
+			sp = sigmoid_prime(z)
+			delta = np.dot(self.weights[-l+1].transpose(), delta) * sp
+			nabla_b[-l] = delta
+			nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
+		return (nabla_b, nabla_w)
 
     def cost_derivative(self, output_activations, y):
         return (output_activations-y)

@@ -2,8 +2,8 @@ import pickle
 import gzip
 
 import numpy as np
-import matplotlib.pyplot as plt
 
+import matplotlib.pyplot as plt
 
 def load_data():
     f = gzip.open('./mnist.pkl.gz', 'rb')
@@ -71,4 +71,3 @@ if __name__ is '__main__':
 
     plt.suptitle('49 Shifted MNIST\nHandwritten Digits', fontsize=16)
     plt.show()
-    
